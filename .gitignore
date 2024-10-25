@@ -1,0 +1,12 @@
+# Exclude Moodle config file
+config.php
+
+# Exclude cache and temporary files
+cache/
+localcache/
+temp/
+sessions/
+trashdir/
+
+# Exclude user-generated content (such as file uploads)
+moodledata/
