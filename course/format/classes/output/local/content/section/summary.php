@@ -85,13 +85,26 @@ class summary implements named_templatable, renderable {
      */
     public function format_summary_text(): string {
         $section = $this->section;
+      
         $context = context_course::instance($section->course);
+      global $DB; // Always include this to access the database in Moodle
+
+// Retrieve the custom_date from mdl_course_sections
+$section2 = $DB->get_record('course_sections', array('id' => $section->id), 'id, custom_date');
         $summarytext = file_rewrite_pluginfile_urls($section->summary, 'pluginfile.php',
             $context->id, 'course', 'section', $section->id);
-
+            if ($section2->custom_date != null) {
+                // custom_date is not null
+                $summarytext= $summarytext .  date('Y-m-d H:i:s', $section2->custom_date);
+            } else {
+                // custom_date is null
+                $summarytext= $summarytext;
+            }
+           
         $options = new stdClass();
         $options->noclean = true;
         $options->overflowdiv = true;
+     // Stops the execution
         return format_text($summarytext, $section->summaryformat, $options);
     }
 }

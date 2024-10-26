@@ -362,9 +362,13 @@ class sectionactions extends baseactions {
         if (empty($fields)) {
             return false;
         }
-
+        // var_dump($fields['custom_date']); // Dumps the variable information
+        // die(); // Stops the execution
+        
         $fields['id'] = $sectioninfo->id;
         $fields['timemodified'] = time();
+        $fields['custom_date'] = $fields['custom_date'];
+
         $DB->update_record('course_sections', $fields);
 
         $sectioninfo->get_component_instance()?->section_updated((object) $fields);

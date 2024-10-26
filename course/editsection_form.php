@@ -44,6 +44,9 @@ class editsection_form extends moodleform {
         $mform->addElement('editor', 'summary_editor', get_string('description'), null, $this->_customdata['editoroptions']);
         $mform->setType('summary_editor', PARAM_RAW);
 
+        $mform->addElement('date_time_selector', 'custom_date', get_string('sectiondate', 'yourplugin'));
+        $mform->setType('custom_date', PARAM_INT);
+        
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
@@ -145,6 +148,40 @@ class editsection_form extends moodleform {
         // Availability: Check availability field does not have errors.
         if (!empty($CFG->enableavailability)) {
             \core_availability\frontend::report_validation_errors($data, $errors);
+        }
+
+        return $errors;
+    }
+}
+
+
+
+// require_once("$CFG->dirroot/lib/formslib.php");
+
+class custom_editsection_form extends editsection_form {
+    
+    // Add any additional form elements or override existing ones here
+    function definition() {
+        parent::definition();
+        die("Unable to connect to $site");
+        $mform = $this->_form;
+
+        // Example: Adding a custom text field
+        $mform->addElement('text', 'customfield', get_string('customfield', 'yourplugin'));
+        $mform->setType('customfield', PARAM_TEXT);
+        $mform->addHelpButton('customfield', 'customfield_help', 'yourplugin');
+
+        // Example: Adding a custom button
+        $mform->addElement('submit', 'custombutton', get_string('custombutton', 'yourplugin'));
+    }
+
+    // Example: Custom validation logic
+    public function validation($data, $files) {
+        $errors = parent::validation($data, $files);
+
+        // Custom validation rule for customfield
+        if (empty($data['customfield'])) {
+            $errors['customfield'] = get_string('customfielderror', 'yourplugin');
         }
 
         return $errors;
